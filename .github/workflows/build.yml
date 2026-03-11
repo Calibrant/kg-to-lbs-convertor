@@ -28,10 +28,20 @@ jobs:
       - name: Setup keystore
         run: |
           echo "${{ secrets.KEYSTORE_BASE64 }}" | base64 --decode > android/app/keystore.jks
+          ls -la android/app/keystore.jks
           echo "KEY_ALIAS=${{ secrets.KEY_ALIAS }}" >> $GITHUB_ENV
           echo "KEY_PASSWORD=${{ secrets.KEY_PASSWORD }}" >> $GITHUB_ENV
           echo "STORE_PASSWORD=${{ secrets.STORE_PASSWORD }}" >> $GITHUB_ENV
           echo "STORE_FILE=app/keystore.jks" >> $GITHUB_ENV
+
+      - name: Verify secrets
+        run: |
+          echo "KEY_ALIAS is set: ${{ secrets.KEY_ALIAS != '' }}"
+          echo "KEY_PASSWORD is set: ${{ secrets.KEY_PASSWORD != '' }}"
+          echo "STORE_PASSWORD is set: ${{ secrets.STORE_PASSWORD != '' }}"
+          echo "KEYSTORE_BASE64 is set: ${{ secrets.KEYSTORE_BASE64 != '' }}"
+          echo "STORE_FILE env: $STORE_FILE"
+          echo "KEY_ALIAS env: $KEY_ALIAS"
 
       - name: Get dependencies
         run: flutter pub get
