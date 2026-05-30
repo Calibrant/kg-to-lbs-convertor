@@ -5,6 +5,7 @@ import 'package:kgtolbs_converter_offline/screens/settings_screen.dart';
 import 'package:kgtolbs_converter_offline/utils/local_storage.dart';
 import 'package:kgtolbs_converter_offline/utils/weight_converter.dart';
 import 'package:kgtolbs_converter_offline/l10n/app_localizations.dart';
+import 'package:kgtolbs_converter_offline/services/review_service.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:screenshot/screenshot.dart';
 import 'package:share_plus/share_plus.dart';
@@ -30,6 +31,7 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   final TextEditingController _weightController = TextEditingController();
   final ScreenshotController _screenshotController = ScreenshotController();
+  final ReviewService _reviewService = ReviewService();
 
   int _currentIndex = 0;
   bool _isKg = true;
@@ -90,6 +92,8 @@ class _HomeScreenState extends State<HomeScreen> {
       });
       // Auto-save current weight
       widget.storage.saveCurrentWeight(input);
+      // Trigger B: Increment conversion counter and check for review
+      _reviewService.incrementConversionAndCheck();
     }
   }
 
@@ -134,6 +138,8 @@ class _HomeScreenState extends State<HomeScreen> {
                   _goalWeight = target;
                 });
                 widget.storage.saveGoalWeight(target);
+                // Trigger A: Request review after successfully saving a goal
+                _reviewService.requestReviewAfterGoalSaved();
                 Navigator.pop(context);
               }
             },

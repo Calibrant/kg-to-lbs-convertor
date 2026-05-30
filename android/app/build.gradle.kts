@@ -3,8 +3,6 @@ import java.io.FileInputStream
 
 plugins {
     id("com.android.application")
-    id("kotlin-android")
-    // The Flutter Gradle Plugin must be applied after the Android and Kotlin Gradle plugins.
     id("dev.flutter.flutter-gradle-plugin")
 }
 
@@ -17,15 +15,11 @@ if (keystorePropertiesFile.exists()) {
 android {
     namespace = "com.kgtolbs.kgtolbs_converter_offline"
     compileSdk = flutter.compileSdkVersion
-    ndkVersion = "27.0.12077973"
+    ndkVersion = flutter.ndkVersion
 
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_11
-        targetCompatibility = JavaVersion.VERSION_11
-    }
-
-    kotlinOptions {
-        jvmTarget = JavaVersion.VERSION_11.toString()
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
     }
 
     defaultConfig {
@@ -40,21 +34,25 @@ android {
     }
 
     signingConfigs {
-        create("release") {
-            keyAlias = keystoreProperties["keyAlias"] as String
-            keyPassword = keystoreProperties["keyPassword"] as String
-            storeFile = keystoreProperties["storeFile"]?.let { file(it) }
-            storePassword = keystoreProperties["storePassword"] as String
-        }
+    create("release") {
+        keyAlias = keystoreProperties["keyAlias"] as? String ?: System.getenv("KEY_ALIAS")
+        keyPassword = keystoreProperties["keyPassword"] as? String ?: System.getenv("KEY_PASSWORD")
+        storeFile = (keystoreProperties["storeFile"] as? String ?: System.getenv("STORE_FILE"))?.let { file(it) }
+        storePassword = keystoreProperties["storePassword"] as? String ?: System.getenv("STORE_PASSWORD")
     }
+}
     buildTypes {
         release {
             signingConfig = signingConfigs.getByName("release")
             isMinifyEnabled = true
             isShrinkResources = false
-
-
         }
+    }
+}
+
+kotlin {
+    compilerOptions {
+        jvmTarget = org.jetbrains.kotlin.gradle.dsl.JvmTarget.JVM_17
     }
 }
 
