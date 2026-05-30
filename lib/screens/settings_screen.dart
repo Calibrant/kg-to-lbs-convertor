@@ -286,8 +286,10 @@ class _SettingsScreenState
                   icon: Icons.share,
                   title: l10n.shareApp,
                   onTap: () {
-                    Share.share(
-                      'Check out this Kg/Lbs Converter app! https://play.google.com/store/apps/details?id=$_packageName',
+                    SharePlus.instance.share(
+                      ShareParams(
+                        text: 'Check out this Kg/Lbs Converter app! https://play.google.com/store/apps/details?id=$_packageName',
+                      ),
                     );
                   },
                 ),

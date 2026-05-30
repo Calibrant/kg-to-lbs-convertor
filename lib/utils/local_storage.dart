@@ -11,50 +11,166 @@ class LocalStorage {
 
   final SharedPreferences _prefs;
 
-  LocalStorage(this._prefs);
+  LocalStorage(
+    this._prefs,
+  );
 
-  static Future<LocalStorage> init() async {
+  static Future<
+    LocalStorage
+  >
+  init() async {
     final prefs = await SharedPreferences.getInstance();
-    return LocalStorage(prefs);
+    return LocalStorage(
+      prefs,
+    );
   }
 
   // Current Weight
-  Future<void> saveCurrentWeight(double weight) => _prefs.setDouble(_keyCurrentWeight, weight);
-  double? getCurrentWeight() => _prefs.getDouble(_keyCurrentWeight);
+  Future<
+    void
+  >
+  saveCurrentWeight(
+    double weight,
+  ) => _prefs.setDouble(
+    _keyCurrentWeight,
+    weight,
+  );
+  double? getCurrentWeight() => _prefs.getDouble(
+    _keyCurrentWeight,
+  );
 
   // Goal Weight
-  Future<void> saveGoalWeight(double weight) => _prefs.setDouble(_keyGoalWeight, weight);
-  double? getGoalWeight() => _prefs.getDouble(_keyGoalWeight);
+  Future<
+    void
+  >
+  saveGoalWeight(
+    double weight,
+  ) => _prefs.setDouble(
+    _keyGoalWeight,
+    weight,
+  );
+  double? getGoalWeight() => _prefs.getDouble(
+    _keyGoalWeight,
+  );
 
   // Unit Preference
-  Future<void> saveIsKg(bool isKg) => _prefs.setBool(_keyIsKg, isKg);
-  bool getIsKg() => _prefs.getBool(_keyIsKg) ?? true; // Default to Kg
+  Future<
+    void
+  >
+  saveIsKg(
+    bool isKg,
+  ) => _prefs.setBool(
+    _keyIsKg,
+    isKg,
+  );
+  bool getIsKg() =>
+      _prefs.getBool(
+        _keyIsKg,
+      ) ??
+      true; // Default to Kg
 
   // Language Preference
-  Future<void> saveLanguage(String code) => _prefs.setString(_keyLanguage, code);
-  String? getLanguage() => _prefs.getString(_keyLanguage);
+  Future<
+    void
+  >
+  saveLanguage(
+    String code,
+  ) => _prefs.setString(
+    _keyLanguage,
+    code,
+  );
+  String? getLanguage() => _prefs.getString(
+    _keyLanguage,
+  );
 
   // Theme Preference
-  Future<void> saveTheme(String theme) => _prefs.setString(_keyTheme, theme);
-  String getTheme() => _prefs.getString(_keyTheme) ?? 'system';
+  Future<
+    void
+  >
+  saveTheme(
+    String theme,
+  ) => _prefs.setString(
+    _keyTheme,
+    theme,
+  );
+  String getTheme() =>
+      _prefs.getString(
+        _keyTheme,
+      ) ??
+      'system';
 
   // History
-  Future<void> addHistoryEntry(double weight, DateTime date) async {
-    List<String> history = _prefs.getStringList(_keyHistory) ?? [];
-    Map<String, dynamic> entry = {
+  Future<
+    void
+  >
+  addHistoryEntry(
+    double weight,
+    DateTime date,
+  ) async {
+    List<
+      String
+    >
+    history =
+        _prefs.getStringList(
+          _keyHistory,
+        ) ??
+        [];
+    Map<
+      String,
+      dynamic
+    >
+    entry = {
       'weight': weight,
       'date': date.toIso8601String(),
     };
-    history.add(jsonEncode(entry));
-    await _prefs.setStringList(_keyHistory, history);
+    history.add(
+      jsonEncode(
+        entry,
+      ),
+    );
+    await _prefs.setStringList(
+      _keyHistory,
+      history,
+    );
   }
 
-  List<Map<String, dynamic>> getHistory() {
-    List<String> history = _prefs.getStringList(_keyHistory) ?? [];
-    return history.map((e) => jsonDecode(e) as Map<String, dynamic>).toList();
+  List<
+    Map<
+      String,
+      dynamic
+    >
+  >
+  getHistory() {
+    List<
+      String
+    >
+    history =
+        _prefs.getStringList(
+          _keyHistory,
+        ) ??
+        [];
+    return history
+        .map(
+          (
+            e,
+          ) =>
+              jsonDecode(
+                    e,
+                  )
+                  as Map<
+                    String,
+                    dynamic
+                  >,
+        )
+        .toList();
   }
-  
-  Future<void> clearHistory() async {
-    await _prefs.remove(_keyHistory);
+
+  Future<
+    void
+  >
+  clearHistory() async {
+    await _prefs.remove(
+      _keyHistory,
+    );
   }
 }
